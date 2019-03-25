@@ -32,8 +32,12 @@ router
     }
   })
   .get(async (req, res) => {
-    const allUsers = await User.find();
-    res.json(allUsers.length);
+    try {
+      const allUsers = await User.find();
+      res.json(allUsers);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   });
 
 router.route("/login").post(async (req, res) => {

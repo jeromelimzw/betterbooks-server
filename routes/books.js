@@ -6,7 +6,7 @@ const Book = require("../models/book");
 router.route("/").get(async (req, res) => {
   try {
     await Book.init();
-    const allBooks = await Book.find();
+    const allBooks = await Book.find().populate("reviews");
     return res.status(200).json(allBooks);
   } catch (err) {
     return res.status(500).send(err.message);
@@ -16,7 +16,7 @@ router.route("/").get(async (req, res) => {
 router.route("/:_id").get(async (req, res) => {
   const { _id } = req.params;
   try {
-    const oneBook = await Book.findOne({ _id });
+    const oneBook = await Book.findOne({ _id }).populate("reviews");
     return res.status(200).json(oneBook);
   } catch (err) {
     return res.status(500).send(err.message);

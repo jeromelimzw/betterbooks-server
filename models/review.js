@@ -1,9 +1,17 @@
-const Schema = require("mongoose").Schema;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const reviewSchema = new Schema({
-  reviews: { type: [String] },
+  book: { type: Schema.Types.ObjectId, ref: "Book", required: true },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: { unique: true }
+  },
+  review: { type: String },
   score: { type: Number, required: [true, "Score is required"] },
-  ISBN13: { type: String }
+  time: { type: Number, default: Date.now }
 });
 
 const Review = mongoose.model("Review", reviewSchema);
