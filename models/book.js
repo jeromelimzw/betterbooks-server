@@ -14,9 +14,9 @@ const bookSchema = new Schema({
   description: { type: String, default: "no description provided" },
   imageUrl: {
     type: String,
-    default:
-      "https://www.orionbooks.co.uk/wp-content/uploads/2018/07/missingbook.png"
-  }
+    required: true
+  },
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review", default: [] }]
 });
 
 const Book = mongoose.model("Book", bookSchema);

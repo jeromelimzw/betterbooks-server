@@ -6,8 +6,7 @@ const reviewSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true,
-    index: { unique: true }
+    required: true
   },
   review: { type: String },
   score: { type: Number, required: [true, "Score is required"] },

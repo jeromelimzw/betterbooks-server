@@ -8,7 +8,8 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   lastname: { type: String, required: true },
   firstname: { type: String, required: true },
-  avatarimgURL: { type: String, required: true }
+  avatarimgURL: { type: String, required: true },
+  books: [{ type: Schema.Types.ObjectId, ref: "Book", required: true }]
 });
 
 userSchema.pre("save", function async(next) {

@@ -3,6 +3,7 @@ const router = express.Router();
 const protectedRouter = express.Router();
 const Book = require("../models/book");
 
+//get all books regardless
 router.route("/").get(async (req, res) => {
   try {
     await Book.init();
@@ -13,6 +14,7 @@ router.route("/").get(async (req, res) => {
   }
 });
 
+//get a single book by id and fully populated reviews
 router.route("/:_id").get(async (req, res) => {
   const { _id } = req.params;
   try {
@@ -23,6 +25,7 @@ router.route("/:_id").get(async (req, res) => {
   }
 });
 
+//add a book if not already in the shared bookshelf
 protectedRouter.route("/").post(async (req, res) => {
   const book = new Book(req.body);
   try {
@@ -34,6 +37,7 @@ protectedRouter.route("/").post(async (req, res) => {
   }
 });
 
+//delete a book by id
 protectedRouter.route("/:_id").delete(async (req, res) => {
   const { _id } = req.params;
   try {

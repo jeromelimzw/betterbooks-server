@@ -4,11 +4,12 @@ const protectedRouterRev = express.Router();
 const Review = require("../models/review");
 const Book = require("../models/book");
 
+//get all reviews regardless
 routerRev.route("/").get(async (req, res) => {
   try {
     await Review.init();
     const allReviews = await Review.find()
-      .populate("user", "username")
+      .populate("user", ["username", "avatarimgURL"])
       .populate("book", "title");
     return res.status(200).json(allReviews);
   } catch (err) {
@@ -23,7 +24,6 @@ routerRev.route("/:_id").get(async (req, res) => {
     const allReviews = await Review.find()
       .populate("user", ["username", "avatarimgURL"])
       .populate("book", "title");
-    console.log(allReviews);
 
     const filteredReviews = allReviews.filter(
       a => a.book._id.toString() === _id.toString()
@@ -34,6 +34,7 @@ routerRev.route("/:_id").get(async (req, res) => {
   }
 });
 
+//add 1 new review (by book id WIP)
 protectedRouterRev.route("/").post(async (req, res) => {
   const review = new Review(req.body);
   try {
