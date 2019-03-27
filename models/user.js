@@ -3,13 +3,13 @@ const { Schema } = mongoose;
 const bcryt = require("bcrypt");
 
 const userSchema = new Schema({
-  username: { type: String, required: true, index: true },
+  username: { type: String, required: true, index: true, unique: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
   lastname: { type: String, required: true },
   firstname: { type: String, required: true },
   avatarimgURL: { type: String, required: true },
-  books: [{ type: Schema.Types.ObjectId, ref: "Book", required: true }]
+  books: [{ type: Schema.Types.ObjectId, ref: "Book" }]
 });
 
 userSchema.pre("save", function async(next) {

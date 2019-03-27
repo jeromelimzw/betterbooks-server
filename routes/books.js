@@ -3,8 +3,9 @@ const router = express.Router();
 const protectedRouter = express.Router();
 const { Book } = require("../models/book");
 const { Review } = require("../models/book");
+const User = require("../models/user");
 
-//get all books regardless with populated reviews
+//get all books regardless with populated reviews => for community page
 router.route("/").get(async (req, res) => {
   try {
     await Book.init();
@@ -18,7 +19,7 @@ router.route("/").get(async (req, res) => {
   }
 });
 
-//get a single book by id with populated reviews
+//get a single book by id with populated reviews => for detailed media page
 router.route("/:_id").get(async (req, res) => {
   const { _id } = req.params;
   try {
@@ -33,7 +34,7 @@ router.route("/:_id").get(async (req, res) => {
   }
 });
 
-//get a single book by id and add a review
+//get a single book by id and add a review => for detailed media page
 router.route("/:_id").post(async (req, res) => {
   const review = new Review(req.body);
   const { _id } = req.params;
@@ -47,34 +48,51 @@ router.route("/:_id").post(async (req, res) => {
   }
 });
 
-//add a book if not already in the shared bookshelf and push to user books array
+//add a book if not already in the shared bookshelf and push to user books array if not already in user array
 protectedRouter.route("/").post(async (req, res) => {
-  const book = new Book(req.body);
+  const { title } = req.body;
+  const username = "john";
+  const oldBook = await Book.findOne({ title });
+  const user = await User.findOne({ username });
+
   try {
-    await Book.init();
-    await book.save();
-    return res.status(200).send("book saved");
+    if (oldBook) {
+      const isOnShelf = await user.books.find(a => a.toString() === oldBook.id);
+      !isOnShelf && user.books.push({ _id: oldBook._id });
+    } else {
+      const newbook = new Book(req.body);
+      await Book.init();
+      await newbook.save();
+      user.books.push({ _id: newbook._id });
+    }
+    await user.save();
+
+    return res.status(200).send(user);
   } catch (err) {
     return res.status(500).send(err.message);
   }
 });
 
-//delete a book by id
+//delete a book by id FROM USER books array
 protectedRouter.route("/:_id").delete(async (req, res) => {
-  const { _id } = req.params;
+  const { id } = req.params;
+  const username = "john";
+  const user = await User.findOne({ username });
+  console.log(user);
+
   try {
-    if (!_id) {
-      return res.status(404).send("id is required");
-    }
-    const book = await Book.find({ _id });
-    if (!book) {
-      return res.status(404).send("book not found");
-    }
-    await Book.findByIdAndDelete(_id);
-    return res.status(200).send(book);
+    const deletebook = user.books.find(a => a.id.toString() === id);
+    const index = user.books.indexOf(deletebook);
+    console.log(deletebook);
+    user.books.splice(index, 1);
+    await user.save();
+
+    return res.status(200).send(user.books);
   } catch (err) {
     return res.status(500).send(err.message);
   }
 });
+
+//get all the books on a users shelf and populate with img/ title/description/authors/genres => for user bookshelf
 
 module.exports = { router, protectedRouter };

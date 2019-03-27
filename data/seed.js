@@ -1,107 +1,59 @@
 const { Book } = require("../models/book");
 const { Review } = require("../models/book");
 const User = require("../models/user");
+const userdata = require("./userSeed");
+const bookdata = require("./bookSeed");
+const reviewdata = require("./reviewSeed");
 
-const seedOneData = async (userdata, reviewdata, bookdata) => {
-  const user = new User(userdata);
-  const review = new Review(reviewdata);
+const seedOneData = async (
+  user1data,
+  user2data,
+  review1data,
+  review2data,
+  bookdata
+) => {
+  const user1 = new User(user1data);
+  const user2 = new User(user2data);
+  const review1 = new Review(review1data);
+  const review2 = new Review(review2data);
   const book = new Book(bookdata);
+  try {
+    review1.user = user1;
+    review2.user = user2;
+    user1.books = [book];
+    user2.books = [book];
+    book.reviews = [review1, review2];
 
-  review.user = user;
-  user.books = [book];
-  book.reviews = [review];
-
-  await user.save();
-  await review.save();
-  await book.save();
+    await user1.save();
+    await user2.save();
+    await review1.save();
+    await review2.save();
+    await book.save();
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
-const userdata = [
-  {
-    username: "john2",
-    email: "john@smith.com",
-    password: "$2b$10$djWH9gUh9l2C8iY5YcIkGOORXMxMjdezs2yEKttdGYw8KxwPcKB16",
-    lastname: "Smith",
-    firstname: "John",
-    avatarimgURL:
-      "http://www.st.buu.ac.th/calendar/semantic/examples/assets/images/avatar/tom.jpg"
-  }
-];
-const reviewdata = [
-  {
-    time: "1553658587872",
-    review: "it was alright",
-    score: 5
-  }
-];
-const bookdata = [
-  {
-    authors: ["Jasper Fforde"],
-    genres: ["Fiction"],
-    language: "en",
-    publisher: "Hachette UK",
-    description:
-      "***Number One bestselling author Jasper Fforde's new standalone, Early Riser, is available to order now!*** Imagine a black and white world where colour is a commodity . . . Hundreds of years in the future, after the Something that Happened, the world is an alarmingly different place. Life is lived according to The Rulebook and social hierarchy is determined by your perception of colour. Eddie Russett is an above average Red who dreams of moving up the ladder by marriage to Constance Oxblood. Until he is sent to the Outer Fringes where he meets Jane - a lowly Grey with an uncontrollable temper and a desire to see him killed. For Eddie, it's love at first sight. But his infatuation will lead him to discover that all is not as it seems in a world where everything that looks black and white is really shades of grey ... If George Orwell had tripped over a paint pot or Douglas Adams favoured colour swatches instead of towels, neither of them would have come up with anything as eccentrically brilliant as Shades of Grey.",
-    title: "Shades of Grey1",
-    type: "BOOK",
-    publishedDate: "2010-10-07",
-    ISBN13: "9781848945845",
-    imageUrl:
-      "http://books.google.com/books/content?id=aSlaRRPEyqkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-  }
-];
-
 const seedData = async () => {
-  await userdata.map(async user => {
-    return await reviewdata.map(async review => {
-      return await bookdata.map(async book => {
-        await seedOneData(user, review, book);
-      });
-    });
+  await [0, 1, 2, 3].map(a => {
+    return seedOneData(
+      userdata[a * 2],
+      userdata[a * 2 + 1],
+      reviewdata[Math.round(Math.random() * 5) + 1],
+      reviewdata[Math.round(Math.random() * 5) + 1],
+      bookdata[a]
+    );
   });
 };
 
-module.exports = seedData;
-
 // const seedData = async () => {
-//   const user1 = new User({
-//     books: [],
-//     username: "john2",
-//     email: "john@smith.com",
-//     password: "$2b$10$djWH9gUh9l2C8iY5YcIkGOORXMxMjdezs2yEKttdGYw8KxwPcKB16",
-//     lastname: "Smith",
-//     firstname: "John",
-//     avatarimgURL:
-//       "http://www.st.buu.ac.th/calendar/semantic/examples/assets/images/avatar/tom.jpg",
-//     __v: 0
+//   await userdata.map(async user => {
+//     return await reviewdata.map(async review => {
+//       return await bookdata.map(async book => {
+//         await seedOneData(user, review, book);
+//       });
+//     });
 //   });
-//   const review1 = new Review({
-//     time: "1553658587872",
-//     review: "it was alright",
-//     score: 5,
-//     user: user1
-//   });
-//   const book1 = new Book({
-//     authors: ["Jasper Fforde"],
-//     genres: ["Fiction"],
-//     language: "en",
-//     publisher: "Hachette UK",
-//     description:
-//       "***Number One bestselling author Jasper Fforde's new standalone, Early Riser, is available to order now!*** Imagine a black and white world where colour is a commodity . . . Hundreds of years in the future, after the Something that Happened, the world is an alarmingly different place. Life is lived according to The Rulebook and social hierarchy is determined by your perception of colour. Eddie Russett is an above average Red who dreams of moving up the ladder by marriage to Constance Oxblood. Until he is sent to the Outer Fringes where he meets Jane - a lowly Grey with an uncontrollable temper and a desire to see him killed. For Eddie, it's love at first sight. But his infatuation will lead him to discover that all is not as it seems in a world where everything that looks black and white is really shades of grey ... If George Orwell had tripped over a paint pot or Douglas Adams favoured colour swatches instead of towels, neither of them would have come up with anything as eccentrically brilliant as Shades of Grey.",
-//     _id: "5c9ae36a952f7e1624fccc4d",
-//     title: "Shades of Grey1",
-//     type: "BOOK",
-//     publishedDate: "2010-10-07",
-//     ISBN13: "9781848945845",
-//     imageUrl:
-//       "http://books.google.com/books/content?id=aSlaRRPEyqkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-//     reviews: [review1]
-//   });
-
-//   review1.user = user1;
-//   user1.books = [book1];
-
-//   await user1.save();
-//   await review1.save();
-//   await book1.save();
 // };
+
+module.exports = seedData;

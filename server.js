@@ -11,6 +11,8 @@ db.on("error", err => {
   console.error("Unable to connect to mongoDB database", err);
 });
 
+db.on("connected", db.dropDatabase);
+
 db.on("connected", err => {
   console.log("Successfully connected to the mongoDB database");
 });
