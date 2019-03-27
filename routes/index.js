@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const secret = "sometimes the path is chosen for you";
 
 const isAuthenticated = async (username, password) => {
   try {
@@ -15,35 +16,28 @@ const isAuthenticated = async (username, password) => {
 };
 
 // add 1 new user
-router
-  .route("/register")
-  .post(async (req, res) => {
-    const user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      lastname: req.body.lastname,
-      firstname: req.body.firstname,
-      avatarimgURL: req.body.avatarimgURL,
-      books: req.body.books
-    });
-    try {
+router.route("/register").post(async (req, res) => {
+  const token = req.body.token;
+  const user = new User({
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    lastname: req.body.lastname,
+    firstname: req.body.firstname,
+    avatarimgURL: req.body.avatarimgURL,
+    books: req.body.books,
+    token: req.body.token
+  });
+  try {
+    if (token === "ilikebigbooksandicannotlie") {
       await user.save();
       return res.status(200).json(user);
-    } catch (err) {
-      return res.status(500).send(err.message);
     }
-  })
-  //get all users regardless with populated book array titles
-  .get(async (req, res) => {
-    try {
-      const allUsers = await User.find().populate("books", "title");
-      res.json(allUsers);
-    } catch (err) {
-      res.status(500).send(err.message);
-    }
-  });
-const secret = "sometimes the path is chosen for you";
+    return res.status(200).send("wrong token");
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+});
 
 //verify a login and set cookie as jwt if ok
 router.route("/login").post(async (req, res) => {
@@ -75,13 +69,5 @@ router.route("/logout").get((req, res) => {
     return res.status(401).send(err.message);
   }
 });
-
-// router.route('/').get(async (req,res)=>{
-// try{
-// const {token} = req.cookie;
-
-// }catch(err){res.status(500).send(err.message)}
-
-// })
 
 module.exports = router;

@@ -1,6 +1,17 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const reviewSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  review: { type: String, required: [true, "Review is required"] },
+  score: { type: Number, required: [true, "Score is required"] },
+  time: { type: Number, default: Date.now }
+});
+
 const bookSchema = new Schema({
   title: { type: String, required: true, index: { unique: true } },
   authors: { type: [String], required: true },
@@ -16,9 +27,10 @@ const bookSchema = new Schema({
     type: String,
     required: true
   },
-  reviews: [{ type: Schema.Types.ObjectId, ref: "Review", default: [] }]
+  reviews: { type: [reviewSchema], required: true, default: [] }
 });
 
 const Book = mongoose.model("Book", bookSchema);
+const Review = mongoose.model("Review", reviewSchema);
 
-module.exports = Book;
+module.exports = { Book, Review };
