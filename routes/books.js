@@ -26,6 +26,7 @@ router.route("/:_id").get(async (req, res) => {
       "username",
       "avatarimgURL"
     ]);
+
     res.status(200).json(oneBook);
   } catch (err) {
     res.status(500).send(err.status);

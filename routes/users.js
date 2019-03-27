@@ -2,7 +2,7 @@ const express = require("express");
 const routerUser = express.Router();
 const User = require("../models/user");
 
-//get all users with books populated
+//get all users with books populated (an array of objects)
 routerUser.route("/").get(async (req, res) => {
   try {
     const allUsers = await User.find().populate("books", "title");
@@ -12,6 +12,7 @@ routerUser.route("/").get(async (req, res) => {
   }
 });
 
+//get a single user with books populated (an object)
 routerUser.route("/:_id").get(async (req, res) => {
   try {
     const oneUser = await User.findOne({ _id }).populate("books", [
