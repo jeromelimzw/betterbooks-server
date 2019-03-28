@@ -80,7 +80,7 @@ protectedRouter.route("/:id").delete(async (req, res) => {
   const user = await User.findOne({ username });
 
   try {
-    const deletebook = user.books.find(a => a.id.toString() === id);
+    const deletebook = user.books.find(a => a._id === id);
     const index = user.books.indexOf(deletebook);
     user.books.splice(index, 1);
     await user.save();
@@ -90,7 +90,5 @@ protectedRouter.route("/:id").delete(async (req, res) => {
     return res.status(500).send(err.message);
   }
 });
-
-//get all the books on a users shelf and populate with img/ title/description/authors/genres => for user bookshelf
 
 module.exports = { router, protectedRouter };
