@@ -39,7 +39,7 @@ router.route("/register").post(async (req, res) => {
   }
 });
 
-//verify a login and set cookie as jwt if ok
+//verify a login and set cookie as jwt if ok and deliver payload userinfo
 router.route("/login").post(async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -50,7 +50,9 @@ router.route("/login").post(async (req, res) => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
-        _id: user._id
+        _id: user._id,
+        username: user.username,
+        avatarimgURL: user.avatarimgURL
       };
       const token = await jwt.sign(payload, secret, { expiresIn: "24h" });
       return res

@@ -12,10 +12,11 @@ routerUser.route("/").get(async (req, res) => {
   }
 });
 
-//get a single user with books populated (an object)
-routerUser.route("/:_id").get(async (req, res) => {
+//get a single user by username with books populated (an object)
+routerUser.route("/:username").get(async (req, res) => {
+  const { username } = req.params;
   try {
-    const oneUser = await User.findOne({ _id }).populate("books", [
+    const oneUser = await User.findOne({ username }).populate("books", [
       "title",
       "authors",
       "imageUrl",

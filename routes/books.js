@@ -37,6 +37,7 @@ router.route("/:_id").get(async (req, res) => {
 //get a single book by id and add a review => for detailed media page
 router.route("/:_id").post(async (req, res) => {
   const review = new Review(req.body);
+  console.log(review);
   const { _id } = req.params;
   try {
     const oneBook = await Book.findOne({ _id });
@@ -50,8 +51,7 @@ router.route("/:_id").post(async (req, res) => {
 
 //add a book if not already in the shared bookshelf and push to user books array if not already in user array
 protectedRouter.route("/").post(async (req, res) => {
-  const { title } = req.body;
-  const username = "john";
+  const { title, username } = req.body;
   const oldBook = await Book.findOne({ title });
   const user = await User.findOne({ username });
 
@@ -76,14 +76,12 @@ protectedRouter.route("/").post(async (req, res) => {
 //delete a book by id FROM USER books array
 protectedRouter.route("/:_id").delete(async (req, res) => {
   const { id } = req.params;
-  const username = "john";
+  const { username } = req.body;
   const user = await User.findOne({ username });
-  console.log(user);
 
   try {
     const deletebook = user.books.find(a => a.id.toString() === id);
     const index = user.books.indexOf(deletebook);
-    console.log(deletebook);
     user.books.splice(index, 1);
     await user.save();
 
