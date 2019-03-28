@@ -74,7 +74,7 @@ protectedRouter.route("/").post(async (req, res) => {
 });
 
 //delete a book by id FROM USER books array
-protectedRouter.route("/:_id").delete(async (req, res) => {
+protectedRouter.route("/:id").delete(async (req, res) => {
   const { id } = req.params;
   const { username } = req.body;
   const user = await User.findOne({ username });
