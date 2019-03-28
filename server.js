@@ -1,7 +1,7 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const port = 8080;
-const mongoURI = "mongodb://localhost/betterbooks";
+const port = process.env.PORT || 8080;
+const mongoURI = process.env.MONGODB_URI || "mongodb://localhost/betterbooks";
 const seedData = require("./data/seed");
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useCreateIndex: true });
