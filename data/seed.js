@@ -46,14 +46,4 @@ const seedData = async () => {
   });
 };
 
-// const seedData = async () => {
-//   await userdata.map(async user => {
-//     return await reviewdata.map(async review => {
-//       return await bookdata.map(async book => {
-//         await seedOneData(user, review, book);
-//       });
-//     });
-//   });
-// };
-
 module.exports = seedData;

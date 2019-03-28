@@ -56,8 +56,8 @@ router.route("/login").post(async (req, res) => {
       };
       const token = await jwt.sign(payload, secret, { expiresIn: "24h" });
       return res
-        .status(200)
-        .cookie(token)
+        .status(201)
+        .cookie("token", token, { httpOnly: true })
         .send(localstorage);
     }
     throw new Error("Illegal entry attempt detected");

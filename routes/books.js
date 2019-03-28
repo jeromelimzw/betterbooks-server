@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const protectedRouter = express.Router();
 const { Book } = require("../models/book");
 const { Review } = require("../models/book");
 const User = require("../models/user");
@@ -50,7 +49,7 @@ router.route("/:_id").post(async (req, res) => {
 });
 
 //add a book if not already in the shared bookshelf and push to user books array if not already in user array
-protectedRouter.route("/").post(async (req, res) => {
+router.route("/").post(async (req, res) => {
   const { title, username } = req.body;
   const oldBook = await Book.findOne({ title });
   const user = await User.findOne({ username });
@@ -74,13 +73,13 @@ protectedRouter.route("/").post(async (req, res) => {
 });
 
 //delete a book by id FROM USER books array
-protectedRouter.route("/:id").delete(async (req, res) => {
+router.route("/:id").delete(async (req, res) => {
   const { id } = req.params;
   const { username } = req.body;
   const user = await User.findOne({ username });
 
   try {
-    const deletebook = user.books.find(a => a._id === id);
+    const deletebook = user.books.find(a => a._id.toString() === id.toString());
     const index = user.books.indexOf(deletebook);
     user.books.splice(index, 1);
     await user.save();
@@ -91,4 +90,4 @@ protectedRouter.route("/:id").delete(async (req, res) => {
   }
 });
 
-module.exports = { router, protectedRouter };
+module.exports = router;

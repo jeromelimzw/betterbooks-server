@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 
-const { router, protectedRouter } = require("./routes/books");
+const router = require("./routes/books");
 const routerUser = require("./routes/users");
 
 app.use(express.json());
@@ -16,7 +16,6 @@ app.use(helmet());
 
 app.use("/", require("./routes/index"));
 app.use("/api/v1/books", router);
-app.use("/api/v1/books", protectedRouter);
 app.use("/api/v1/users", routerUser);
 
 module.exports = app;
