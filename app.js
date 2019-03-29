@@ -7,16 +7,23 @@ const helmet = require("helmet");
 const router = require("./routes/books");
 const routerUser = require("./routes/users");
 
-const whitelist = ["https://betterbooks-client.herokuapp.com/"];
+const isDev = process.env.NODE_ENV !== "production";
 
-var corsOptions = {
-  origin: function(origin, callback) {
+const whitelist = ["hhttps://betterbooks-client.herokuapp.com/"];
+
+if (isDev) {
+  whitelist.push("http://localhost:3006");
+}
+
+const corsOptions = {
+  origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
-  }
+  },
+  credentials: true
 };
 
 app.use(cors(corsOptions));
