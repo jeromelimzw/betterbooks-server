@@ -9,7 +9,10 @@ const routerUser = require("./routes/users");
 
 const isDev = process.env.NODE_ENV !== "production";
 
-const whitelist = ["hhttps://betterbooks-client.herokuapp.com/"];
+const whitelist = [
+  "hhttps://betterbooks-client.herokuapp.com/",
+  "https://betterbooks.netlify.com/"
+];
 
 if (isDev) {
   whitelist.push("http://localhost:3006");
