@@ -3,13 +3,12 @@ const cors = require("cors");
 const app = express();
 //const morgan = require("morgan");
 const helmet = require("helmet");
-const cookieParser = require("cookie-parser");
 
 const router = require("./routes/books");
 const routerUser = require("./routes/users");
 
 app.use(express.json());
-app.use(cookieParser());
+
 app.use(cors());
 //app.use(morgan("tiny"));
 app.use(helmet());
