@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const secret = "sometimes the path is chosen for you";
 
 const isAuthenticated = async (username, password) => {
   try {
@@ -45,7 +44,7 @@ router.route("/login").post(async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     if (await isAuthenticated(username, password)) {
-      const payload = { user: user.firstname };
+      const payload = { user: user.username };
       const localstorage = {
         firstname: user.firstname,
         lastname: user.lastname,
@@ -54,7 +53,9 @@ router.route("/login").post(async (req, res) => {
         username: user.username,
         avatarimgURL: user.avatarimgURL
       };
-      const token = await jwt.sign(payload, secret, { expiresIn: "24h" });
+      const token = await jwt.sign(payload, process.env.SECRET, {
+        expiresIn: "24h"
+      });
       return res
         .status(201)
         .cookie("token", token, { httpOnly: true })

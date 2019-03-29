@@ -1,6 +1,8 @@
 const express = require("express");
 const routerUser = express.Router();
 const User = require("../models/user");
+const verifyToken = require("../middleware/auth");
+routerUser.use(verifyToken);
 
 //get all users with books populated (an array of objects)
 routerUser.route("/").get(async (req, res) => {

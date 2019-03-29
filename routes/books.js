@@ -3,11 +3,12 @@ const router = express.Router();
 const { Book } = require("../models/book");
 const { Review } = require("../models/book");
 const User = require("../models/user");
+const verifyToken = require("../middleware/auth");
+router.use(verifyToken);
 
 //get all books regardless with populated reviews => for community page
 router.route("/").get(async (req, res) => {
   try {
-    await Book.init();
     const allBooks = await Book.find().populate("reviews.user", [
       "username",
       "avatarimgURL"

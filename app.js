@@ -1,11 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-//const morgan = require("morgan");
+const morgan = require("morgan");
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 
 const router = require("./routes/books");
 const routerUser = require("./routes/users");
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -31,8 +36,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
-//app.use(morgan("tiny"));
+app.use(morgan("tiny"));
 app.use(helmet());
 
 app.use("/", require("./routes/index"));
