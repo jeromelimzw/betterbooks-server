@@ -4,7 +4,6 @@ const { Book } = require("../models/book");
 const { Review } = require("../models/book");
 const User = require("../models/user");
 const verifyToken = require("../middleware/auth");
-router.use(verifyToken);
 
 //get all books regardless with populated reviews => for community page
 router.route("/").get(async (req, res) => {
@@ -34,6 +33,7 @@ router.route("/:_id").get(async (req, res) => {
   }
 });
 
+router.use(verifyToken);
 //get a single book by id and add a review => for detailed media page
 router.route("/:_id").post(async (req, res) => {
   const review = new Review(req.body);

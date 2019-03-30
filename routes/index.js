@@ -16,23 +16,17 @@ const isAuthenticated = async (username, password) => {
 
 // add 1 new user
 router.route("/register").post(async (req, res) => {
-  const token = req.body.token;
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    lastname: req.body.lastname,
-    firstname: req.body.firstname,
-    avatarimgURL: req.body.avatarimgURL,
-    books: req.body.books,
-    token: req.body.token
-  });
+  const { username } = req.body;
+
   try {
-    if (token === "ilikebigbooksandicannotlie") {
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      res.status(401).send("username already taken");
+    } else {
+      const user = new User(req.body);
       await user.save();
       return res.status(200).json(user);
     }
-    return res.status(400).send("wrong token");
   } catch (err) {
     return res.status(500).send(err.message);
   }

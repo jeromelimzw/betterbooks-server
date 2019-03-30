@@ -9,7 +9,7 @@ const userSchema = new Schema({
   lastname: { type: String, required: true },
   firstname: { type: String, required: true },
   avatarimgURL: { type: String, required: true },
-  books: [{ type: Schema.Types.ObjectId, ref: "Book" }]
+  books: [{ type: Schema.Types.ObjectId, ref: "Book", default: [] }]
 });
 
 userSchema.pre("save", function async(next) {
