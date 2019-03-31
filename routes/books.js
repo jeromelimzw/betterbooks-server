@@ -37,7 +37,6 @@ router.use(verifyToken);
 //get a single book by id and add a review => for detailed media page
 router.route("/:_id").post(async (req, res) => {
   const review = new Review(req.body);
-  console.log(review);
   const { _id } = req.params;
   try {
     const oneBook = await Book.findOne({ _id });

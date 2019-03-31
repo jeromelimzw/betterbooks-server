@@ -4,14 +4,8 @@ const app = express();
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
-
 const router = require("./routes/books");
 const routerUser = require("./routes/users");
-
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
 const isDev = process.env.NODE_ENV !== "production";
 
 const whitelist = [
@@ -20,6 +14,7 @@ const whitelist = [
 ];
 
 if (isDev) {
+  require("dotenv").config();
   whitelist.push("http://localhost:3006");
 }
 

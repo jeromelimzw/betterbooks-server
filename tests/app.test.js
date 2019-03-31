@@ -1,10 +1,10 @@
 const request = require("supertest");
 const app = require("../app");
 
-const route = "/";
+const route = "/logout";
 
-describe("My first route", () => {
-  test("returns status code 200 OK", () => {
+describe("[CONNECTION] checks", () => {
+  test("Basic function test", () => {
     return request(app)
       .get(route)
       .expect(200);
