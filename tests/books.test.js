@@ -93,7 +93,7 @@ describe("[BOOKS] checks", () => {
   });
 
   describe("[POST] checks", () => {
-    test("get a book by id and add a review as a user", async done => {
+    xtest("get a book by id and add a review as a user", async done => {
       const user = await User.findOne({ firstname: "John" });
       jwt.verify.mockResolvedValueOnce({ username: user.username });
       const book = await Book.findOne({ title: "The Well Of Lost Plots" });
